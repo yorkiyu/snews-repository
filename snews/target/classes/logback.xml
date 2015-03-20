@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- configuration file for LogBack (slf4J implementation) See here for more 
+	details: http://gordondickens.com/wordpress/2013/03/27/sawing-through-the-java-loggers/ -->
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<!-- To enable JMX Management -->
+	<jmxConfigurator />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{0} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="debug_log"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY </onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>e:/log/debug/debug.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%-4relative %d{HH:mm:ss.SSS} - [%thread] %-5level %class -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="info_log"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY </onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>e:/log/info/info.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%-4relative %d{HH:mm:ss.SSS} - [%thread] %-5level %class -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="error_log"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY </onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>e:/log/error/error.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%-4relative %d{HH:mm:ss.SSS} - [%thread] %-5level %class -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="DeviceHeartbeatLogger">
+		<appender-ref ref="device_heartbeat" />
+	</logger>
+
+	<logger name="DaemonErrLogger">
+		<appender-ref ref="daemon_error" />
+	</logger>
+
+	<logger name="OperatorLogger">
+		<appender-ref ref="operator_log" />
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="console" />
+		<!-- <appender-ref ref="file"/> <appender-ref ref="debug_log"/> <appender-ref 
+			ref="info_log"/> -->
+		<appender-ref ref="error_log" />
+		<appender-ref ref="MONGO" />
+	</root>
+</configuration>
